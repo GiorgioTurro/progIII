@@ -148,6 +148,13 @@ class BoxView extends JPanel implements Observer{
         msgLabel = new JLabel("Empty Box");
         panelCenter.add(msgLabel);
         
+        msgLabel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                System.out.println(e);
+            }
+        });
+        
         JPanel panelSouth = new JPanel(new FlowLayout());
         add(panelSouth,BorderLayout.SOUTH);
         
