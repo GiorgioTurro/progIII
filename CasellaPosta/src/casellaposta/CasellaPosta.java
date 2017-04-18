@@ -14,12 +14,10 @@ import java.util.*;
  *
  * @author Giorgio
  */
-public class CasellaPosta extends JFrame {
+public class CasellaPosta extends JFrame implements ActionListener{
 
     
     public CasellaPosta(){
-        
-        
         
         Email e1 = new Email("Mario","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
         Email e2 = new Email("Carlo","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
@@ -32,6 +30,7 @@ public class CasellaPosta extends JFrame {
         l.add(e2);
         l.add(e3);
         l.add(e4);
+
         Box casellaModello = new Box(l);
         BoxControl casellaControllo = new BoxControl(casellaModello);
         BoxView casellaVista = new BoxView(casellaControllo);
@@ -39,33 +38,48 @@ public class CasellaPosta extends JFrame {
         casellaVista.setListeners(casellaControllo);
         casellaModello.addObserver(casellaVista);
         
-        setLayout(new BorderLayout());
+        //setLayout(new BorderLayout());
         add(casellaVista, BorderLayout.CENTER);
         add(new ExitButton(), BorderLayout.SOUTH);
+        add(new sideToolShelf(), BorderLayout.EAST);
+
         setTitle("Casella di Posta");
         setSize(320, 220);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
-        
-        
-    }
-    
-    public static void main(String[] args) {
-        CasellaPosta p = new CasellaPosta();
     }
     
     class ExitButton extends JButton {
-    public ExitButton () {
-        super("Exit");
-        addActionListener(new ActionListener() {
-    		public void actionPerformed(ActionEvent e) {
-        		System.exit(0);
-			}
-		});
+
+        public ExitButton () {
+            super("Exit");
+            addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+        }
     }
+
+    //Potrebbe essere inutile a seconda di cosa ha fatto Giorgio
+    public void actionPerformed(ActionEvent e){
+        if(e.getActionCommand().equals("New")){
+            //Crea un pannello all'interno nel center del BorderLayout con due text field per To: e Message: (Creare i relativi label)
+        }
+
     }
-    
+}
+//Casella con i pulsanti new inbox forward e delete da posizionare nel lato sinistro del frame principale
+class sideToolShelf extends JPanel {
+
+    public sideToolShelf() {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        add(new JButton("New"));
+        add(new JButton("Inbox"));
+        add(new JButton("Forward"));
+        add(new JButton("Delete"));
+    }
+
 }
 
 class Box extends Observable{
@@ -111,8 +125,7 @@ class Box extends Observable{
 }
 
 class BoxControl extends JPanel implements ActionListener{
-    private Box casella; 
-    
+    private Box casella;
     
     public BoxControl(Box cas){
         super(new FlowLayout());
@@ -169,7 +182,6 @@ class BoxView extends JPanel implements Observer{
         
         
     }
-    
 
     @Override
     public void update(Observable ob,Object extra_arg){
@@ -179,5 +191,9 @@ class BoxView extends JPanel implements Observer{
     
     public void setListeners(BoxControl c){
         bottoneLista.addActionListener(c);
+    }
+
+    public static void main(String[] args) {
+        CasellaPosta p = new CasellaPosta();
     }
 }
