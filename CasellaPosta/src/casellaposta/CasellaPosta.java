@@ -43,7 +43,7 @@ public class CasellaPosta extends JFrame {
         add(casellaVista, BorderLayout.CENTER);
         add(new ExitButton(), BorderLayout.SOUTH);
         setTitle("Casella di Posta");
-        setSize(320, 220);
+        setSize(555, 521);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         
@@ -84,7 +84,7 @@ class Box extends Observable{
     }
     
     public void setLista(){
-        String out="<html>";
+        /*String out="<html>";
         Iterator<Email> it = lista.iterator();
         
         
@@ -93,14 +93,16 @@ class Box extends Observable{
             System.out.println(out);
         }
         out = out + " </html>";
-        lista1=out;
+        lista1=out;*/
         setChanged();
         notifyObservers();
+        
+        
     }
     
-    public String getLista(){
+    public ArrayList<Email> getLista(){
         System.out.println("sono qui");
-        return lista1;
+        return lista;
     }
       
     @Override
@@ -114,10 +116,11 @@ class BoxControl extends JPanel implements ActionListener{
     private Box casella; 
     
     
+    
     public BoxControl(Box cas){
         super(new FlowLayout());
         casella = cas;
-               
+        
     }
     
     @Override
@@ -133,6 +136,8 @@ class BoxView extends JPanel implements Observer{
     private JLabel label;
     private JLabel msgLabel;
     private JButton bottoneLista;
+    private ArrayList<MyLabel> labels;
+    private JPanel panelCenter = new JPanel(new GridLayout(0,1));
     
     public BoxView(BoxControl controller){
         super(new BorderLayout());
@@ -142,18 +147,11 @@ class BoxView extends JPanel implements Observer{
         label = new JLabel("Account di Posta di Giorgio");
         panelNorth.add(label);
         
-        JPanel panelCenter = new JPanel(new FlowLayout());
         add(panelCenter,BorderLayout.CENTER);
         
-        msgLabel = new JLabel("Empty Box");
-        panelCenter.add(msgLabel);
+        labels = new ArrayList<MyLabel>();
         
-        msgLabel.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                System.out.println(e);
-            }
-        });
+        
         
         JPanel panelSouth = new JPanel(new FlowLayout());
         add(panelSouth,BorderLayout.SOUTH);
@@ -174,10 +172,46 @@ class BoxView extends JPanel implements Observer{
     @Override
     public void update(Observable ob,Object extra_arg){
         Box b = (Box) ob;
-        msgLabel.setText(b.getLista());
+        MyLabel l;
+        /*msgLabel.setText(b.getLista());*/
+        Iterator<Email> it = (b.getLista()).iterator();
+        while(it.hasNext()){
+            System.out.println("gg");
+            Email e = it.next();
+            l= new MyLabel(e, e.toString());
+            
+            l.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                
+                MyLabel ml = (MyLabel) e.getSource();
+                System.out.println(ml.getE());
+            }
+        });
+            labels.add(l);
+            panelCenter.add(l);
+        }
+        //add(panelCenter, BorderLayout.CENTER);
+        validate();
+        System.out.println("gfdgd");
+        
     }
     
     public void setListeners(BoxControl c){
         bottoneLista.addActionListener(c);
     }
+}
+
+class MyLabel extends JLabel{
+    private Email z;
+    
+    public MyLabel(Email e,String s){
+        super(s);
+        this.z=e;
+    }
+    
+    public Email getE(){
+        return this.z;
+    }
+    
 }
