@@ -83,6 +83,14 @@ class Box extends Observable{
         nomeUtente="Giorgio";
     }
     
+    public void setFrame(){
+        MyFrame m = new MyFrame();
+        
+        setChanged();
+        notifyObservers();
+        
+    }
+    
     public void setLista(){
         /*String out="<html>";
         Iterator<Email> it = lista.iterator();
@@ -128,6 +136,9 @@ class BoxControl extends JPanel implements ActionListener{
         JButton source = (JButton) e.getSource();
         System.out.println("ciao");
         if(source.getText().equals("Lista")) casella.setLista();
+        if(source.getText().equals("Scrivi")){
+            casella.setFrame();
+        }
     }
     
 }
@@ -136,6 +147,7 @@ class BoxView extends JPanel implements Observer{
     private JLabel label;
     private JLabel msgLabel;
     private JButton bottoneLista;
+    private JButton creaMessaggio;
     private ArrayList<MyLabel> labels;
     private JPanel panelCenter = new JPanel(new GridLayout(0,1));
     
@@ -159,9 +171,10 @@ class BoxView extends JPanel implements Observer{
         bottoneLista = new JButton("Lista");
         panelSouth.add(bottoneLista);
         
-        addMouseListener(new MouseAdapter(){
-            
-        });
+        creaMessaggio = new JButton("Scrivi");
+        panelSouth.add(creaMessaggio);
+        
+        
         
         
         
@@ -193,12 +206,13 @@ class BoxView extends JPanel implements Observer{
         }
         //add(panelCenter, BorderLayout.CENTER);
         validate();
-        System.out.println("gfdgd");
+        
         
     }
     
     public void setListeners(BoxControl c){
         bottoneLista.addActionListener(c);
+        creaMessaggio.addActionListener(c);
     }
 }
 
@@ -212,6 +226,48 @@ class MyLabel extends JLabel{
     
     public Email getE(){
         return this.z;
+    }
+    
+}
+
+class MyFrame extends JFrame{
+    private JLabel label;
+    private JLabel testo;
+    private JLabel testo1;
+    private JButton sub;
+    
+    public MyFrame(){
+        super();
+        setLayout(new BorderLayout());
+        setTitle("Scrittura messaggio");
+        setSize(555, 521);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        
+        JPanel j = new JPanel(new FlowLayout());
+        add(j,BorderLayout.NORTH);
+        
+        label = new JLabel("Scrittura messaggi");
+        j.add(label);
+        
+        JPanel z = new JPanel(new GridLayout(0,1));
+        add(z,BorderLayout.CENTER);
+        
+        testo = new JLabel("Testo");
+        z.add(testo);
+        JTextArea a = new JTextArea();
+        z.add(new JScrollPane(a));
+        
+        testo1 = new JLabel("Argomento");
+        z.add(testo1);
+        JTextArea b = new JTextArea();
+        z.add(new JScrollPane(b));
+        
+        sub = new JButton("Invio");
+        
+        
+        
+        
     }
     
 }
