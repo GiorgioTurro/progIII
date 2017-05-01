@@ -83,14 +83,15 @@ class MyFrame extends JFrame{
         //BoxLayout boxLayout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
+
         JPanel toP = new JPanel(new FlowLayout(FlowLayout.LEFT));   //Pannello destinatari messaggio
-            toP.setBackground(new Color(0,0,255));
+            //toP.setBackground(new Color(0,0,255));    //A solo scopo di debug
             toP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
         JPanel objP = new JPanel(new FlowLayout(FlowLayout.LEFT));  //Pannello oggetto messaggio
-            objP.setBackground(new Color(255, 0,0));
+            //objP.setBackground(new Color(255, 0,0));  //A solo scopo di debug
             objP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
-        JPanel textP = new JPanel(new FlowLayout(FlowLayout.LEFT)); //Pannello testo messaggio
-            textP.setBackground(new Color(0,255,0));
+        JPanel textP = new JPanel(new BorderLayout()); //Pannello testo messaggio
+            //textP.setBackground(new Color(0,255,0));  //A solo a scopo di debug
 
         JLabel toL = new JLabel("A:");          //Label per pannello toP
         JLabel objL = new JLabel("Oggetto");    //Label per pannello objP
@@ -104,16 +105,22 @@ class MyFrame extends JFrame{
         toP.add(toTF);
         objP.add(objL);
         objP.add(objTF);
-        textP.add(textL);
-        textP.add(textA);
+        textP.add(textL, BorderLayout.NORTH);
+        textP.add(textA, BorderLayout.CENTER);
 
         add(toP);
         add(objP);
         add(textP);
-        
+
+        // 1. Da rivedere
+        Dimension textFieldDimension = new Dimension(450, (int) toTF.getPreferredSize().getHeight());
+        toTF.setPreferredSize(textFieldDimension);
+        objTF.setPreferredSize(textFieldDimension);
+        // 1. Fine da rivedere
+
         sub = new JButton("Invio");
 
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   L'intera app si chiude
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //L'intera app si chiude
     }
     
 }
