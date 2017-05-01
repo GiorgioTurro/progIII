@@ -1,6 +1,7 @@
 package casellaposta;
 
 import java.awt.*;
+import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
@@ -75,32 +76,44 @@ class MyFrame extends JFrame{
     
     public MyFrame(){
         super();
-        setLayout(new BorderLayout());
         setTitle("Scrittura messaggio");
-        setSize(555, 521);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
-        JPanel j = new JPanel(new FlowLayout());
-        add(j,BorderLayout.NORTH);
-        
-        label = new JLabel("Scrittura messaggi");
-        j.add(label);
-        
-        JPanel z = new JPanel(new GridLayout(0,1));
-        add(z,BorderLayout.CENTER);
-        
-        testo = new JLabel("Testo");
-        z.add(testo);
-        JTextArea a = new JTextArea();
-        z.add(new JScrollPane(a));
-        
-        testo1 = new JLabel("Argomento");
-        z.add(testo1);
-        JTextArea b = new JTextArea();
-        z.add(new JScrollPane(b));
+        setSize(555, 521);
+
+        //BoxLayout boxLayout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+
+        JPanel toP = new JPanel(new FlowLayout(FlowLayout.LEFT));   //Pannello destinatari messaggio
+            toP.setBackground(new Color(0,0,255));
+            toP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
+        JPanel objP = new JPanel(new FlowLayout(FlowLayout.LEFT));  //Pannello oggetto messaggio
+            objP.setBackground(new Color(255, 0,0));
+            objP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
+        JPanel textP = new JPanel(new FlowLayout(FlowLayout.LEFT)); //Pannello testo messaggio
+            textP.setBackground(new Color(0,255,0));
+
+        JLabel toL = new JLabel("A:");          //Label per pannello toP
+        JLabel objL = new JLabel("Oggetto");    //Label per pannello objP
+        JLabel textL = new JLabel("Testo");     //Label per pannello textP
+
+        JTextField toTF = new JTextField();        //Casella di testo per pannello toP
+        JTextField objTF = new JTextField();       //Casella di testo per pannello objP
+        JTextArea textA = new JTextArea();      //Area di testo per pannello textP
+
+        toP.add(toL);
+        toP.add(toTF);
+        objP.add(objL);
+        objP.add(objTF);
+        textP.add(textL);
+        textP.add(textA);
+
+        add(toP);
+        add(objP);
+        add(textP);
         
         sub = new JButton("Invio");
+
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   L'intera app si chiude
     }
     
 }
