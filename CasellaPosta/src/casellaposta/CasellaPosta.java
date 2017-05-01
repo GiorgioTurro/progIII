@@ -14,10 +14,12 @@ import java.util.*;
  *
  * @author Giorgio
  */
-public class CasellaPosta extends JFrame implements ActionListener{
+public class CasellaPosta extends JFrame {
 
     
     public CasellaPosta(){
+        
+        
         
         Email e1 = new Email("Mario","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
         Email e2 = new Email("Carlo","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
@@ -30,7 +32,6 @@ public class CasellaPosta extends JFrame implements ActionListener{
         l.add(e2);
         l.add(e3);
         l.add(e4);
-
         Box casellaModello = new Box(l);
         BoxControl casellaControllo = new BoxControl(casellaModello);
         BoxView casellaVista = new BoxView(casellaControllo);
@@ -38,48 +39,33 @@ public class CasellaPosta extends JFrame implements ActionListener{
         casellaVista.setListeners(casellaControllo);
         casellaModello.addObserver(casellaVista);
         
-        //setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
         add(casellaVista, BorderLayout.CENTER);
         add(new ExitButton(), BorderLayout.SOUTH);
-        add(new sideToolShelf(), BorderLayout.EAST);
-
         setTitle("Casella di Posta");
-        setSize(320, 220);
+        setSize(555, 521);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        
+        
+        
+    }
+    
+    public static void main(String[] args) {
+        CasellaPosta p = new CasellaPosta();
     }
     
     class ExitButton extends JButton {
-
-        public ExitButton () {
-            super("Exit");
-            addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-            });
-        }
+    public ExitButton () {
+        super("Exit");
+        addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+        		System.exit(0);
+			}
+		});
     }
-
-    //Potrebbe essere inutile a seconda di cosa ha fatto Giorgio
-    public void actionPerformed(ActionEvent e){
-        if(e.getActionCommand().equals("New")){
-            //Crea un pannello all'interno nel center del BorderLayout con due text field per To: e Message: (Creare i relativi label)
-        }
-
     }
-}
-//Casella con i pulsanti new inbox forward e delete da posizionare nel lato sinistro del frame principale
-class sideToolShelf extends JPanel {
-
-    public sideToolShelf() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new JButton("New"));
-        add(new JButton("Inbox"));
-        add(new JButton("Forward"));
-        add(new JButton("Delete"));
-    }
-
+    
 }
 
 class Box extends Observable{
@@ -97,8 +83,16 @@ class Box extends Observable{
         nomeUtente="Giorgio";
     }
     
+    public void setFrame(){
+        MyFrame m = new MyFrame();
+        
+        setChanged();
+        notifyObservers();
+        
+    }
+    
     public void setLista(){
-        String out="<html>";
+        /*String out="<html>";
         Iterator<Email> it = lista.iterator();
         
         
@@ -107,14 +101,16 @@ class Box extends Observable{
             System.out.println(out);
         }
         out = out + " </html>";
-        lista1=out;
+        lista1=out;*/
         setChanged();
         notifyObservers();
+        
+        
     }
     
-    public String getLista(){
+    public ArrayList<Email> getLista(){
         System.out.println("sono qui");
-        return lista1;
+        return lista;
     }
       
     @Override
@@ -125,12 +121,14 @@ class Box extends Observable{
 }
 
 class BoxControl extends JPanel implements ActionListener{
-    private Box casella;
+    private Box casella; 
+    
+    
     
     public BoxControl(Box cas){
         super(new FlowLayout());
         casella = cas;
-               
+        
     }
     
     @Override
@@ -138,6 +136,9 @@ class BoxControl extends JPanel implements ActionListener{
         JButton source = (JButton) e.getSource();
         System.out.println("ciao");
         if(source.getText().equals("Lista")) casella.setLista();
+        if(source.getText().equals("Scrivi")){
+            casella.setFrame();
+        }
     }
     
 }
@@ -146,6 +147,9 @@ class BoxView extends JPanel implements Observer{
     private JLabel label;
     private JLabel msgLabel;
     private JButton bottoneLista;
+    private JButton creaMessaggio;
+    private ArrayList<MyLabel> labels;
+    private JPanel panelCenter = new JPanel(new GridLayout(0,1));
     
     public BoxView(BoxControl controller){
         super(new BorderLayout());
@@ -155,18 +159,11 @@ class BoxView extends JPanel implements Observer{
         label = new JLabel("Account di Posta di Giorgio");
         panelNorth.add(label);
         
-        JPanel panelCenter = new JPanel(new FlowLayout());
         add(panelCenter,BorderLayout.CENTER);
         
-        msgLabel = new JLabel("Empty Box");
-        panelCenter.add(msgLabel);
+        labels = new ArrayList<MyLabel>();
         
-        msgLabel.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e){
-                System.out.println(e);
-            }
-        });
+        
         
         JPanel panelSouth = new JPanel(new FlowLayout());
         add(panelSouth,BorderLayout.SOUTH);
@@ -174,26 +171,103 @@ class BoxView extends JPanel implements Observer{
         bottoneLista = new JButton("Lista");
         panelSouth.add(bottoneLista);
         
-        addMouseListener(new MouseAdapter(){
-            
-        });
+        creaMessaggio = new JButton("Scrivi");
+        panelSouth.add(creaMessaggio);
+        
+        
         
         
         
         
     }
+    
 
     @Override
     public void update(Observable ob,Object extra_arg){
         Box b = (Box) ob;
-        msgLabel.setText(b.getLista());
+        MyLabel l;
+        /*msgLabel.setText(b.getLista());*/
+        Iterator<Email> it = (b.getLista()).iterator();
+        while(it.hasNext()){
+            System.out.println("gg");
+            Email e = it.next();
+            l= new MyLabel(e, e.toString());
+            
+            l.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                
+                MyLabel ml = (MyLabel) e.getSource();
+                System.out.println(ml.getE());
+            }
+        });
+            labels.add(l);
+            panelCenter.add(l);
+        }
+        //add(panelCenter, BorderLayout.CENTER);
+        validate();
+        
+        
     }
     
     public void setListeners(BoxControl c){
         bottoneLista.addActionListener(c);
+        creaMessaggio.addActionListener(c);
     }
+}
 
-    public static void main(String[] args) {
-        CasellaPosta p = new CasellaPosta();
+class MyLabel extends JLabel{
+    private Email z;
+    
+    public MyLabel(Email e,String s){
+        super(s);
+        this.z=e;
     }
+    
+    public Email getE(){
+        return this.z;
+    }
+    
+}
+
+class MyFrame extends JFrame{
+    private JLabel label;
+    private JLabel testo;
+    private JLabel testo1;
+    private JButton sub;
+    
+    public MyFrame(){
+        super();
+        setLayout(new BorderLayout());
+        setTitle("Scrittura messaggio");
+        setSize(555, 521);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        
+        JPanel j = new JPanel(new FlowLayout());
+        add(j,BorderLayout.NORTH);
+        
+        label = new JLabel("Scrittura messaggi");
+        j.add(label);
+        
+        JPanel z = new JPanel(new GridLayout(0,1));
+        add(z,BorderLayout.CENTER);
+        
+        testo = new JLabel("Testo");
+        z.add(testo);
+        JTextArea a = new JTextArea();
+        z.add(new JScrollPane(a));
+        
+        testo1 = new JLabel("Argomento");
+        z.add(testo1);
+        JTextArea b = new JTextArea();
+        z.add(new JScrollPane(b));
+        
+        sub = new JButton("Invio");
+        
+        
+        
+        
+    }
+    
 }
