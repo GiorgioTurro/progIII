@@ -62,17 +62,20 @@ class EmailLabel extends JLabel{
         this.z=e;
     }
     
+
     public Email getE(){
         return this.z;
     }
     
 }
 
+
 class MyFrame extends JFrame{
     private JLabel label;
     private JLabel testo;
     private JLabel testo1;
     private JButton sub;
+
     
     public MyFrame(){
         super();
@@ -123,4 +126,5 @@ class MyFrame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //L'intera app si chiude
     }
     
+
 }

@@ -64,7 +64,7 @@ public class Email {
     
     @Override
     public String toString(){
-        return mittente + " " + dataInvio;
+        return mittente + " " + argomento + " " + dataInvio;
     }
     
 }
