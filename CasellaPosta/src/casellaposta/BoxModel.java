@@ -1,15 +1,25 @@
 package casellaposta;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 
 public class BoxModel extends Observable {
-    private ArrayList<Email> lista;
     private String nomeUtente;
-    private String lista1;
+    private ArrayList<Email> lista;
 
     public BoxModel(){
         lista = new ArrayList();
+        Email e1 = new Email("Mario","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e2 = new Email("Carlo","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e3 = new Email("Luca","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e4 = new Email("Laura","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e5 = new Email("Martina","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
+        lista.add(e5);
+        lista.add(e1);
+        lista.add(e2);
+        lista.add(e3);
+        lista.add(e4);
         nomeUtente="Giorgio";
     }
 
@@ -18,9 +28,12 @@ public class BoxModel extends Observable {
         nomeUtente="Giorgio";
     }
 
+    public String getNomeUtente(){
+        return nomeUtente;
+    }
+
     public void setFrame(){
         MyFrame m = new MyFrame();
-
         setChanged();
         notifyObservers();
 
