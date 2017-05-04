@@ -16,21 +16,29 @@ public class BoxView extends JFrame implements Observer {
     private ArrayList<EmailLabel> labels;
     private JPanel panelCenter = new JPanel(new GridLayout(0,1));
 
-    public BoxView(BoxControl controller){
+    private BoxModel boxModel;
+    private BoxControl boxControl;
+
+    public BoxView(BoxModel boxModel){
+
+        //Seguendo il primo pattern MVC alla view creata gli si passa il model e il controller viene creato dalla view
+        //al controller gli si passano sia model che view, possibilmente in futuro gli si priverà della view
+        this.boxModel = boxModel;
+        boxControl = new BoxControl(boxModel, this);
 
         JPanel toolShelfP = new JPanel();   //Pannello laterale contenente diversi pulsanti di utilità
         toolShelfP.setLayout(new BoxLayout(toolShelfP, BoxLayout.PAGE_AXIS));
         JPanel nomeUtenteP = new JPanel();
 
-        JLabel nomeUtenteL = new JLabel(controller.getNomeUtente());
+        JLabel nomeUtenteL = new JLabel(boxControl.getNomeUtente()); //E' il caso che venga fatto dal Controller o dal Model?
 
         JButton newEmailB = new JButton("Nuovo");
         JButton allMessagesB = new JButton("Messaggi");
         JButton exitB = new JButton("Esci");
 
         //Listener dei bottoni
-        newEmailB.addActionListener(controller);
-        allMessagesB.addActionListener(controller);
+        newEmailB.addActionListener(boxControl);
+        allMessagesB.addActionListener(boxControl);
         exitB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

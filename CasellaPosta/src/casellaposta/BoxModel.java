@@ -33,16 +33,8 @@ public class BoxModel extends Observable {
     }
 
     public void setLista(){
-        /*String out="<html>";
-        Iterator<Email> it = lista.iterator();
 
-
-        while(it.hasNext()){
-            out = out + it.next() + "<br>";
-            System.out.println(out);
-        }
-        out = out + " </html>";
-        lista1=out;*/
+        //Qui andrebbe inserito il recupero delle mail dal server, tipo un refresh
         setChanged();
         notifyObservers();
     }

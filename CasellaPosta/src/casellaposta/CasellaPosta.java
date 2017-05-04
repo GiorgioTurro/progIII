@@ -11,8 +11,7 @@ public class CasellaPosta extends JFrame {
     public CasellaPosta(){
 
         BoxModel casellaModello = new BoxModel();
-        BoxControl casellaControllo = new BoxControl(casellaModello);
-        BoxView casellaVista = new BoxView(casellaControllo);
+        BoxView casellaVista = new BoxView(casellaModello);
 
         casellaModello.addObserver(casellaVista);
     }
