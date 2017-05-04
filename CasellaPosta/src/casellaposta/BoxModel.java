@@ -32,13 +32,6 @@ public class BoxModel extends Observable {
         return nomeUtente;
     }
 
-    public void setFrame(){
-        MyFrame m = new MyFrame();
-        setChanged();
-        notifyObservers();
-
-    }
-
     public void setLista(){
         /*String out="<html>";
         Iterator<Email> it = lista.iterator();

@@ -7,8 +7,7 @@ import java.awt.event.ActionListener;
 
 public class BoxControl extends JPanel implements ActionListener {
     private BoxModel casella;
-
-
+    private BoxView boxView;
 
     public BoxControl(BoxModel cas){
         super(new FlowLayout());
@@ -18,12 +17,13 @@ public class BoxControl extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e){
-        JButton source = (JButton) e.getSource();
-        System.out.println("ciao");
-        if(source.getText().equals("Lista")) casella.setLista();
-        if(source.getText().equals("Scrivi")){
-            casella.setFrame();
-        }
+        String source = (String) ((JButton) e.getSource()).getText();
+        if(source.equals("Messaggi")) casella.setLista();
+        if(source.equals("Nuovo")) MyFrame.getMyFrame();
+    }
+
+    public String getNomeUtente(){
+        return casella.getNomeUtente();
     }
 
 }

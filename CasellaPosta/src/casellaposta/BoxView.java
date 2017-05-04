@@ -2,10 +2,7 @@ package casellaposta;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
@@ -23,11 +20,23 @@ public class BoxView extends JFrame implements Observer {
 
         JPanel toolShelfP = new JPanel();   //Pannello laterale contenente diversi pulsanti di utilità
         toolShelfP.setLayout(new BoxLayout(toolShelfP, BoxLayout.PAGE_AXIS));
+        JPanel nomeUtenteP = new JPanel();
 
-        JLabel nomeUtenteL = null;  //BoxModel.getNomeUtente()
+        JLabel nomeUtenteL = new JLabel(controller.getNomeUtente());
 
         JButton newEmailB = new JButton("Nuovo");
         JButton allMessagesB = new JButton("Messaggi");
+        JButton exitB = new JButton("Esci");
+
+        //Listener dei bottoni
+        newEmailB.addActionListener(controller);
+        allMessagesB.addActionListener(controller);
+        exitB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                System.exit(0);
+            }
+        });
 
         //Parametri del Frame
         setTitle("Casella di Posta");
@@ -40,10 +49,13 @@ public class BoxView extends JFrame implements Observer {
         toolShelfP.add(allMessagesB);
         toolShelfP.add(Box.createVerticalGlue());
 
+        //Layout del Panel nomeUtenteP
+        nomeUtenteP.add(nomeUtenteL);
+
         //Layout del frame
         setLayout(new BorderLayout());
-        add(nomeUtenteL, BorderLayout.NORTH);
-        add(new BoxView.ExitButton(), BorderLayout.SOUTH);
+        add(nomeUtenteP, BorderLayout.NORTH);
+        add(exitB, BorderLayout.SOUTH);
         add(panelCenter,BorderLayout.CENTER);
         add(toolShelfP, BorderLayout.WEST);
 
@@ -62,8 +74,6 @@ public class BoxView extends JFrame implements Observer {
         panelSouth.add(creaMessaggio);
         */
     }
-
-
 
     @Override
     public void update(Observable ob, Object extra_arg){
@@ -91,25 +101,12 @@ public class BoxView extends JFrame implements Observer {
         validate();
     }
 
-    public void setListeners(BoxControl c){
-        bottoneLista.addActionListener(c);
-        creaMessaggio.addActionListener(c);
-    }
-
-    class ExitButton extends JButton {
-        public ExitButton () {
-            super("Exit");
-            addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-            });
-        }
-    }
-
 }
 
 class MyFrame extends JFrame{
+
+    static MyFrame mf = null;
+
     private JLabel label;
     private JLabel testo;
     private JLabel testo1;
@@ -161,7 +158,19 @@ class MyFrame extends JFrame{
 
         sub = new JButton("Invio");
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //L'intera app si chiude
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                super.windowClosed(windowEvent);
+                mf = null;
+            }
+        });
+    }
+
+    public static synchronized MyFrame getMyFrame(){
+        if(mf == null)
+            mf = new MyFrame();
+        return mf;
     }
 
 }
