@@ -15,7 +15,7 @@ public class Email {
     
     private String mittente;
     private String destinatario;
-    private String argomento;
+    private String oggetto;
     private String testo;
     private String priorita;
     private Date dataInvio;
@@ -23,7 +23,7 @@ public class Email {
     public Email(){
         mittente="";
         destinatario="";
-        argomento = "";
+        oggetto = "";
         testo = "";
         priorita = "";
         dataInvio = null;
@@ -32,7 +32,7 @@ public class Email {
     public Email(String mit,String dest,String arg,String tes,String prt,Date dt){
         mittente=mit;
         destinatario=dest;
-        argomento=arg;
+        oggetto=arg;
         testo=tes;
         priorita=prt;
         dataInvio=dt;
@@ -47,7 +47,7 @@ public class Email {
     }
     
     public String getArg(){
-        return argomento;
+        return oggetto;
     }
     
     public String getTes(){
@@ -64,7 +64,7 @@ public class Email {
     
     @Override
     public String toString(){
-        return mittente + " " + argomento + " " + dataInvio;
+        return mittente + " " + oggetto + " " + dataInvio;
     }
     
 }

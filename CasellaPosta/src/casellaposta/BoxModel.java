@@ -43,6 +43,13 @@ public class BoxModel extends Observable {
         System.out.println("sono qui");
         return lista;
     }
+    
+    public void addEmail(Email em){
+        lista.add(em);
+        setChanged();
+        notifyObservers();
+        
+    }
 
     @Override
     public String toString(){

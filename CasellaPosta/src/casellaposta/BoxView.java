@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
@@ -103,6 +104,7 @@ public class BoxView extends JFrame implements Observer {
             });
             panelCenter.add(l);
         }
+        b.getLista().clear();
         panelCenter.add(Box.createVerticalBox());
         validate();
     }
@@ -114,10 +116,15 @@ class MyFrame extends JFrame{
     private JLabel label;
     private JLabel testo;
     private JLabel testo1;
+    private JTextField toTF;
+    private JTextField objTF;
+    private JTextArea textA;
     private JButton sub;
+    private BoxControl controller;
 
-    public MyFrame(){
+    public MyFrame(BoxControl c){
         super();
+        controller=c;
         setTitle("Scrittura messaggio");
         setVisible(true);
         setSize(555, 521);
@@ -139,9 +146,9 @@ class MyFrame extends JFrame{
         JLabel objL = new JLabel("Oggetto");    //Label per pannello objP
         JLabel textL = new JLabel("Testo");     //Label per pannello textP
 
-        JTextField toTF = new JTextField();        //Casella di testo per pannello toP
-        JTextField objTF = new JTextField();       //Casella di testo per pannello objP
-        JTextArea textA = new JTextArea();      //Area di testo per pannello textP
+        toTF = new JTextField();        //Casella di testo per pannello toP
+        objTF = new JTextField();       //Casella di testo per pannello objP
+        textA = new JTextArea();      //Area di testo per pannello textP
 
         toP.add(toL);
         toP.add(toTF);
@@ -161,6 +168,10 @@ class MyFrame extends JFrame{
         // 1. Fine da rivedere
 
         sub = new JButton("Invio");
+        add(sub);
+        sub.addActionListener(controller);
+        
+        
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -171,10 +182,14 @@ class MyFrame extends JFrame{
         });
     }
 
-    public static synchronized MyFrame getMyFrame(){
+    public static synchronized MyFrame getMyFrame(BoxControl c){
         if(mf == null)
-            mf = new MyFrame();
+            mf = new MyFrame(c);
         return mf;
+    }
+    
+    public Email getEmail(){
+        return new Email("Giorgio",toTF.getText(),objTF.getText(),textA.getText(),"alta",new Date());
     }
 
 }
