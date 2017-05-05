@@ -18,7 +18,9 @@ public class CasellaPosta extends JFrame {
     
     public static void main(String[] args) {
 
+
         CasellaPosta p = new CasellaPosta();
     }
     
 }
+
