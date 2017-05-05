@@ -13,8 +13,7 @@ public class BoxView extends JFrame implements Observer {
     private JLabel msgLabel;
     private JButton bottoneLista;
     private JButton creaMessaggio;
-    private ArrayList<EmailLabel> labels;
-    private JPanel panelCenter = new JPanel(new GridLayout(0,1));
+    private JPanel panelCenter;
 
     private BoxModel boxModel;
     private BoxControl boxControl;
@@ -25,6 +24,9 @@ public class BoxView extends JFrame implements Observer {
         //al controller gli si passano sia model che view, possibilmente in futuro gli si priverà della view
         this.boxModel = boxModel;
         boxControl = new BoxControl(boxModel, this);
+
+        panelCenter = new JPanel();
+        panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.PAGE_AXIS));
 
         JPanel toolShelfP = new JPanel();   //Pannello laterale contenente diversi pulsanti di utilità
         toolShelfP.setLayout(new BoxLayout(toolShelfP, BoxLayout.PAGE_AXIS));
@@ -90,29 +92,23 @@ public class BoxView extends JFrame implements Observer {
         /*msgLabel.setText(b.getLista());*/
         Iterator<Email> it = (b.getLista()).iterator();
         while(it.hasNext()){
-            System.out.println("gg");
             Email e = it.next();
-            l= new EmailLabel(e, e.toString());
-
+            l = new EmailLabel(e, e.toString());
             l.addMouseListener(new MouseAdapter(){
                 @Override
                 public void mouseClicked(MouseEvent e){
-
                     EmailLabel ml = (EmailLabel) e.getSource();
                     System.out.println(ml.getE());
                 }
             });
-            labels.add(l);
             panelCenter.add(l);
         }
-        //add(panelCenter, BorderLayout.CENTER);
+        panelCenter.add(Box.createVerticalBox());
         validate();
     }
-
 }
 
 class MyFrame extends JFrame{
-
     static MyFrame mf = null;
 
     private JLabel label;

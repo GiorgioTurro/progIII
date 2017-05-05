@@ -1,5 +1,6 @@
 package casellaposta;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
@@ -33,7 +34,6 @@ public class BoxModel extends Observable {
     }
 
     public void setLista(){
-
         //Qui andrebbe inserito il recupero delle mail dal server, tipo un refresh
         setChanged();
         notifyObservers();
@@ -48,5 +48,17 @@ public class BoxModel extends Observable {
     public String toString(){
         return ("Nome proprietario: "+nomeUtente);
     }
+}
 
+class EmailLabel extends JLabel {
+    private Email z;
+
+    public EmailLabel(Email e,String s){
+        super(s);
+        this.z=e;
+    }
+
+    public Email getE(){
+        return this.z;
+    }
 }
