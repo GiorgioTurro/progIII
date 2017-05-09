@@ -95,13 +95,7 @@ public class BoxView extends JFrame implements Observer {
         while(it.hasNext()){
             Email e = it.next();
             l = new EmailLabel(e, e.toString());
-            l.addMouseListener(new MouseAdapter(){
-                @Override
-                public void mouseClicked(MouseEvent e){
-                    EmailLabel ml = (EmailLabel) e.getSource();
-                    System.out.println(ml.getE());
-                }
-            });
+            l.addMouseListener(boxControl);  
             panelCenter.add(l);
         }
         b.getLista().clear();
@@ -120,11 +114,10 @@ class MyFrame extends JFrame{
     private JTextField objTF;
     private JTextArea textA;
     private JButton sub;
-    private BoxControl controller;
+
 
     public MyFrame(BoxControl c){
         super();
-        controller=c;
         setTitle("Scrittura messaggio");
         setVisible(true);
         setSize(555, 521);
@@ -169,7 +162,7 @@ class MyFrame extends JFrame{
 
         sub = new JButton("Invio");
         add(sub);
-        sub.addActionListener(controller);
+        sub.addActionListener(c);
         
         
 
@@ -182,9 +175,79 @@ class MyFrame extends JFrame{
         });
     }
 
+    public MyFrame(BoxControl c,Email em){
+        super();
+        setTitle("Scrittura messaggio");
+        setVisible(true);
+        setSize(555, 521);
+
+        //BoxLayout boxLayout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+
+
+        JPanel toP = new JPanel(new FlowLayout(FlowLayout.LEFT));   //Pannello destinatari messaggio
+        //toP.setBackground(new Color(0,0,255));    //A solo scopo di debug
+        toP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
+        JPanel objP = new JPanel(new FlowLayout(FlowLayout.LEFT));  //Pannello oggetto messaggio
+        //objP.setBackground(new Color(255, 0,0));  //A solo scopo di debug
+        objP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
+        JPanel textP = new JPanel(new BorderLayout()); //Pannello testo messaggio
+        //textP.setBackground(new Color(0,255,0));  //A solo a scopo di debug
+
+        JLabel toL = new JLabel("A:");          //Label per pannello toP
+        JLabel objL = new JLabel("Oggetto");    //Label per pannello objP
+        JLabel textL = new JLabel("Testo");     //Label per pannello textP
+
+        toTF = new JTextField();        //Casella di testo per pannello toP
+        
+        objTF = new JTextField();       //Casella di testo per pannello objP
+        objTF.setText("FW :"+em.getArg());
+        textA = new JTextArea();      //Area di testo per pannello textP
+        textA.setText("FW :"+em.getTes());
+
+        toP.add(toL);
+        toP.add(toTF);
+        objP.add(objL);
+        objP.add(objTF);
+        textP.add(textL, BorderLayout.NORTH);
+        textP.add(textA, BorderLayout.CENTER);
+
+        add(toP);
+        add(objP);
+        add(textP);
+
+        // 1. Da rivedere
+        Dimension textFieldDimension = new Dimension(450, (int) toTF.getPreferredSize().getHeight());
+        toTF.setPreferredSize(textFieldDimension);
+        objTF.setPreferredSize(textFieldDimension);
+        // 1. Fine da rivedere
+
+        sub = new JButton("Invio");
+        add(sub);
+        sub.addActionListener(c);
+        
+        
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                super.windowClosed(windowEvent);
+                mf = null;
+            }
+        });
+    }    
+    
+
     public static synchronized MyFrame getMyFrame(BoxControl c){
         if(mf == null)
             mf = new MyFrame(c);
+        return mf;
+    }
+    
+    public static synchronized MyFrame forward(BoxControl c,Email em){
+        if(mf == null){
+            mf = new MyFrame(c,em);
+        }
         return mf;
     }
     
@@ -192,5 +255,57 @@ class MyFrame extends JFrame{
         return new Email("Giorgio",toTF.getText(),objTF.getText(),textA.getText(),"alta",new Date());
     }
 
+}
+
+class ReadMsg extends JFrame{
+    
+    public ReadMsg(BoxControl c,EmailLabel ml){
+        setTitle("Messaggio");
+        setVisible(true);
+        setSize(555, 521);
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
+
+
+        JPanel toP = new JPanel(new FlowLayout(FlowLayout.LEFT));   //Pannello destinatari messaggio
+        //toP.setBackground(new Color(0,0,255));    //A solo scopo di debug
+        toP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
+        JPanel objP = new JPanel(new FlowLayout(FlowLayout.LEFT));  //Pannello oggetto messaggio
+        //objP.setBackground(new Color(255, 0,0));  //A solo scopo di debug
+        objP.setMaximumSize(new Dimension(Short.MAX_VALUE, 15));
+        
+        JPanel textP = new JPanel(new BorderLayout());
+                
+        
+        JLabel toL = new JLabel("Mittente: "+ml.getE().getMit());          //Label per pannello toP
+        JLabel objL = new JLabel("Oggetto: "+ml.getE().getArg());    //Label per pannello objP
+        JLabel textL = new JLabel("Testo: "+ml.getE().getTes()); 
+                    
+        toP.add(toL);
+        objP.add(objL);
+        textP.add(textL, BorderLayout.NORTH);
+ 
+        add(toP);
+        add(objP);
+        add(textP);
+                    
+        JButton del = new JButton("Elimina");
+        JButton fwd = new JButton("Forward");
+                   
+        add(del);
+        add(fwd);
+        
+        del.addActionListener(c);
+        fwd.addActionListener(c);
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                super.windowClosed(windowEvent);
+                
+            }
+        });
+    }
+    
+    
 }
 

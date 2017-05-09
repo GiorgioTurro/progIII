@@ -1,5 +1,6 @@
 package casellaposta;
 
+import java.awt.Container;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +51,17 @@ public class BoxModel extends Observable {
         notifyObservers();
         
     }
+    
+    public void elimina(EmailLabel l){
+        Container p = l.getParent();
+        p.remove(l);
+        p.validate();
+        p.repaint();
+        
+        
+    }
+    
+   
 
     @Override
     public String toString(){
@@ -62,6 +74,7 @@ class EmailLabel extends JLabel {
 
     public EmailLabel(Email e,String s){
         super(s);
+        
         this.z=e;
     }
 
