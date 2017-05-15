@@ -64,7 +64,9 @@ public class BoxView extends JFrame implements Observer {
         nomeUtenteP.add(nomeUtenteL);
 
         //Layout del frame
-        setLayout(new BorderLayout());
+        BorderLayout frameBL = new BorderLayout();
+        frameBL.setHgap(20);
+        setLayout(frameBL);
         add(nomeUtenteP, BorderLayout.NORTH);
         add(exitB, BorderLayout.SOUTH);
         add(panelCenter,BorderLayout.CENTER);
@@ -91,15 +93,19 @@ public class BoxView extends JFrame implements Observer {
         BoxModel b = (BoxModel) ob;
         EmailLabel l;
         /*msgLabel.setText(b.getLista());*/
+
+        panelCenter.removeAll();
+
         Iterator<Email> it = (b.getLista()).iterator();
         while(it.hasNext()){
             Email e = it.next();
-            l = new EmailLabel(e, e.toString());
-            l.addMouseListener(boxControl);  
+            l = new EmailLabel(e);
+            l.addMouseListener(boxControl);
+            l.setBackground(new Color(0,0,255));
             panelCenter.add(l);
         }
-        b.getLista().clear();
-        panelCenter.add(Box.createVerticalBox());
+        //panelCenter.add(Box.createVerticalBox());
+        panelCenter.setBackground(new Color(255,0,0));
         validate();
     }
 }
@@ -199,7 +205,7 @@ class MyFrame extends JFrame{
         JLabel textL = new JLabel("Testo");     //Label per pannello textP
 
         toTF = new JTextField();        //Casella di testo per pannello toP
-        
+
         objTF = new JTextField();       //Casella di testo per pannello objP
         objTF.setText("FW :"+em.getArg());
         textA = new JTextArea();      //Area di testo per pannello textP

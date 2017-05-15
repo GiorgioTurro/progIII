@@ -12,16 +12,16 @@ public class BoxModel extends Observable {
 
     public BoxModel(){
         lista = new ArrayList();
-        Email e1 = new Email("Mario","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
-        Email e2 = new Email("Carlo","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
-        Email e3 = new Email("Luca","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
-        Email e4 = new Email("Laura","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
-        Email e5 = new Email("Martina","Giorgio","Posta","Ho bisogno di un favore","alta",new Date());
-        lista.add(e5);
+        Email e1 = new Email("olivero@gmail.com","turro@gmail.com","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e2 = new Email("peluso@gmail.com","olivero@gmail.com","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e3 = new Email("peluso@gmail.com","olivero@gmail.com","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e4 = new Email("turro@gmail.com","olivero@gmail.com","Posta","Ho bisogno di un favore","alta",new Date());
+        Email e5 = new Email("turro@gmail.com","olivero@gmail.com","Posta","Ho bisogno di un favore","alta",new Date());
         lista.add(e1);
         lista.add(e2);
         lista.add(e3);
         lista.add(e4);
+        lista.add(e5);
         nomeUtente="Giorgio";
     }
 
@@ -54,14 +54,12 @@ public class BoxModel extends Observable {
     
     public void elimina(EmailLabel l){
         Container p = l.getParent();
+        Email e = l.getE();
+        lista.remove(e);
         p.remove(l);
         p.validate();
         p.repaint();
-        
-        
     }
-    
-   
 
     @Override
     public String toString(){
@@ -72,8 +70,8 @@ public class BoxModel extends Observable {
 class EmailLabel extends JLabel {
     private Email z;
 
-    public EmailLabel(Email e,String s){
-        super(s);
+    public EmailLabel(Email e){
+        super(e.toString());
         
         this.z=e;
     }

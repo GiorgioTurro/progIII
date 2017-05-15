@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Giorgio
  */
-public class Email {
+public class Email implements EmailI{
     
     private String mittente;
     private String destinatario;
@@ -64,7 +64,8 @@ public class Email {
     
     @Override
     public String toString(){
-        return mittente + " " + oggetto + " " + dataInvio;
+        return String.format("%-15s%-10s%s",mittente,oggetto,dataInvio);
+        //return mittente + "   " + oggetto + "   " + dataInvio;
     }
     
 }

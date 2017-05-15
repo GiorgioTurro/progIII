@@ -1,21 +1,34 @@
 package casellaposta;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
+import java.rmi.Naming;
+import mailserver.MailServerI;
 
 public class BoxControl implements ActionListener,MouseListener {
     private BoxModel boxModel;
     private BoxView boxView; //***Dato il pattern Observer-Observable il riferimento alla View potrebbe non servire
     private MyFrame mf;
     private EmailLabel ml;
+    private MailServerI ms;
 
     public BoxControl(BoxModel bm, BoxView bv){
         boxModel = bm;
         boxView = bv; //***
+        try {
+            Context context = new InitialContext();
+            ms = (MailServerI) Naming.lookup("//127.0.0.1:1099/Ciao");
+        }catch(Exception e){
+            System.out.println(e.getMessage() + "Boh " + e.getCause().toString());
+        }
+
+        if(ms == null){
+            System.out.println("MailServer è null");
+        }else
+            System.out.println(ms.toString());
     }
 
     @Override
@@ -25,6 +38,7 @@ public class BoxControl implements ActionListener,MouseListener {
         if(source.equals("Nuovo")) mf = MyFrame.getMyFrame(this);
         if(source.equals("Invio")){
             Email email = mf.getEmail();
+            mf.dispatchEvent(new WindowEvent(mf, WindowEvent.WINDOW_CLOSING));
             boxModel.addEmail(email);
         }
         if(source.equals("Elimina")){
@@ -65,5 +79,6 @@ public class BoxControl implements ActionListener,MouseListener {
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
+
+
